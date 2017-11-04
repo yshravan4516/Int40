@@ -71,13 +71,17 @@ Int40 *fibKw26(int n, Int40 *first, Int40 *second)
 	for (i = 2; i <= n; i++)
   	{
 		tmp = first + second;
+		first = kw26Destroyer(first);
 		first = second;
 		second = tmp;
 	}
 	return tmp;
 }
 
-void kw26Rating(void);
+void kw26Rating(void)
+{
+	fprintf( stderr, "NID: sh498458;Difficulty: 1.0;Time: 1.5 hr\n");
+}
 
 Int40 *parseString(char *str)
 {
@@ -124,7 +128,49 @@ Int40 *parseString(char *str)
 	return num;
 }
 
-Int40 *loadHWConfigVariable(int doSeed);
+Int40 *loadHWConfigVariable(int doSeed)
+{
+	seed = doseed;
+	if(seed == 0)
+	{
+		Int40 *num  = (Int40*)malloc(sizeof(Int40));
+		if(!num)
+			return NULL;
+		num->digit = (int*)malloc(sizeof(int)*40);
+		if(!num->digit)
+			return NULL;
+		int i, j, random;
+		for(i = 0; i < 5; i++)
+		{
+			random = rand()%10;
+			j = 0;
+			while(j < i)
+			{
+				if(num->digit[j] == random)
+				{
+					j = i;
+					i--;
+				}
+				j++;
+			}
+			if( j == i)
+			{
+				num->digits[i] = random;
+				num->digits[i + 5] = random;
+				num->digits[i + 10] = random;
+				num->digits[i + 15] = random;
+				num->digits[i + 20] = random;
+				num->digits[i + 25] = random;
+				num->digits[i + 30] = random;
+				num->digits[i + 35] = random;
+			}
+		}
+		return num;
+	}
+	else
+	{
+	}
+}
 
 Int40 *loadCryptoVariable(char *inputFilename);
 
