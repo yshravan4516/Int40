@@ -29,9 +29,36 @@ Int40 *hwConfigVariable; // 40 digits of psuedo or real
                          // randomness to start the F[x]
 // Functional Prototypes
 
-Int40 *kw26Add(Int40 *p, Int40 *q);
+Int40 *kw26Add(Int40 *p, Int40 *q)
+{
+	int carry;
+	Int40 *num  = (Int40*)malloc(sizeof(Int40));
+	if(!num || !p || !q)
+		return NULL;
+	num->digit = (int*)malloc(sizeof(int)*40);
+	if(!num->digit)
+		return NULL;
+	int i = 0, sum = 0;
+	carry = 0;
+	for(i = 39; i >= 0; i--)
+	{
+		sum = p->digit[i] + q->digit[i] + carry;
+		
+		carry = sum / 16;
+		num->digit[i] = sum - (carry * 16);
+	}
+	return num;
+}
 
-Int40 *kw26Destroyer(Int40 *p);
+Int40 *kw26Destroyer(Int40 *p)
+{
+	if(!p)
+		return NULL;
+	if(p->digit)
+		free(p->digit);
+	free(p);
+	return NULL;
+}
 
 Int40 *fibKw26(int n, Int40 *first, Int40 *second);
 
