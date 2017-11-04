@@ -62,6 +62,7 @@ Int40 *kw26Destroyer(Int40 *p)
 
 Int40 *fibKw26(int n, Int40 *first, Int40 *second)
 {
+	nFib = n;
 	if( n == 0)
 		return first;
 	else if(n == 1)
@@ -121,7 +122,7 @@ Int40 *parseString(char *str)
 			num->digit[i] = 10 + str[j] - 'a';
 		else
 		{
-			fprintf( stderr, "It String is less than 40 Digits\n");
+			fprintf( stderr, "It need to be a valid HexaDecimal\n");
 			num->digit[i] = 0;
 		}
 	}
@@ -131,15 +132,17 @@ Int40 *parseString(char *str)
 Int40 *loadHWConfigVariable(int doSeed)
 {
 	seed = doseed;
-	if(seed == 0)
+	srand(time(NULL));
+	Int40 *num  = (Int40*)malloc(sizeof(Int40));
+	if(!num)
+		return NULL;
+	num->digit = (int*)malloc(sizeof(int)*40);
+	if(!num->digit)
+		return NULL;
+	int i, j;
+	if(seed != 0)
 	{
-		Int40 *num  = (Int40*)malloc(sizeof(Int40));
-		if(!num)
-			return NULL;
-		num->digit = (int*)malloc(sizeof(int)*40);
-		if(!num->digit)
-			return NULL;
-		int i, j, random;
+		int random;
 		for(i = 0; i < 5; i++)
 		{
 			random = rand()%10;
@@ -165,14 +168,47 @@ Int40 *loadHWConfigVariable(int doSeed)
 				num->digits[i + 35] = random;
 			}
 		}
-		return num;
 	}
 	else
 	{
+		for(i = 0; i < 40; i++)
+		{
+			num->digits[i] = 1;
+		}
 	}
+	return num;
 }
 
-Int40 *loadCryptoVariable(char *inputFilename);
+Int40 *loadCryptoVariable(char *inputFilename)
+{
+	cryptoVariableFilename = inputFilename;
+	FILE *ifp= fopen(inputFilename);
+	if(!ifp)
+		return NULL;
+	char c;
+	int i;
+	Int40 *num  = (Int40*)malloc(sizeof(Int40));
+	if(!num)
+		return NULL;
+	num->digit = (int*)malloc(sizeof(int)*40);
+	if(!num->digit)
+		return NULL;
+	for(i = 0; i < 40; i++)
+	{
+		fprintf(ifp, "%c", &c);
+		if(c >= '0' && c  <='9')
+			num->digit[i] = c - '0';
+		else if(c >= 'A' && c  <='F')
+			num->digit[i] = 10 + c - 'A';
+		else if(c >= 'f' && c  <='f')
+			num->digit[i] = 10 + c - 'a';
+		else
+		{
+			fprintf( stderr, "It need to be a valid HexaDecimal\n");
+			num->digit[i] = 0;
+		}
+	}
+}
 
 Int40 *loadPlainText(char *inputFilename);
 
