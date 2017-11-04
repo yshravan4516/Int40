@@ -60,7 +60,22 @@ Int40 *kw26Destroyer(Int40 *p)
 	return NULL;
 }
 
-Int40 *fibKw26(int n, Int40 *first, Int40 *second);
+Int40 *fibKw26(int n, Int40 *first, Int40 *second)
+{
+	if( n == 0)
+		return first;
+	else if(n == 1)
+		return second;
+	int i = 0;
+	Int40 *tmp;
+	for (i = 2; i <= n; i++)
+  	{
+		tmp = first + second;
+		first = second;
+		second = tmp;
+	}
+	return tmp;
+}
 
 void kw26Rating(void);
 
